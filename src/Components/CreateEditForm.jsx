@@ -1,8 +1,13 @@
 
 import React, { useEffect, useState } from 'react'
 import Navbar from './navbar';
+import { useLocation } from 'react-router-dom';
 
-function CreateOrEditUser({ selectedUser, onSubmit }) {
+function CreateOrEditUser({  onSubmit }) {
+ 
+  const location = useLocation(); // Get location object to access route state
+  const selectedUser = location.state?.selectedUser || null;
+//  console.log(selectedUser);
     const [isEditMode, setIsEditMode] = useState(false);
     const [Name, setName] = useState("");
     const [email, setEmail] = useState("");
@@ -11,17 +16,19 @@ function CreateOrEditUser({ selectedUser, onSubmit }) {
     const [gender, setGender] = useState("");
     const [course, setCourse] = useState([]);
     const [img, setImg] = useState(null);
+    // const [uniqueId, setUniqueId] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
   
     useEffect(() => {
       // If selectedUser is passed (i.e., edit mode), populate form with user data
       if (selectedUser) {
         setIsEditMode(true);
-        setName(selectedUser.Name);
+        setName(selectedUser.name);
         setEmail(selectedUser.email);
         setMobileNumber(selectedUser.mobileNumber);
         setDesignation(selectedUser.designation);
         setGender(selectedUser.gender);
+      
         setCourse(selectedUser.course || []);
         setImg(selectedUser.img || null);
       } else {
@@ -49,8 +56,10 @@ function CreateOrEditUser({ selectedUser, onSubmit }) {
   
     const handleSubmit = (e) => {
       e.preventDefault();
+   
       const formData = {
         Name,
+      
         email,
         mobileNumber,
         designation,
@@ -58,8 +67,8 @@ function CreateOrEditUser({ selectedUser, onSubmit }) {
         course,
         img
       };
-  
-      // Call onSubmit with the form data (parent handles create or update)
+  // console.log(formData)
+     
       onSubmit(formData, isEditMode);
     };
   
@@ -80,6 +89,7 @@ function CreateOrEditUser({ selectedUser, onSubmit }) {
               <input
                 id="Name"
                 type="text"
+                required
                 className="w-full bg-white p-2 rounded-md text-black border border-1 border-slate-500"
                 value={Name}
                 onChange={(e) => setName(e.target.value)}
@@ -92,6 +102,7 @@ function CreateOrEditUser({ selectedUser, onSubmit }) {
                 type="text"
                 className="w-full bg-white p-2 rounded-md text-black border border-1 border-slate-500"
                 value={email}
+                required
                 onChange={(e) => setEmail(e.target.value)}
               />
             </label>
@@ -100,6 +111,7 @@ function CreateOrEditUser({ selectedUser, onSubmit }) {
               <input
                 id="MobileNumber"
                 type="text"
+                required
                 className="w-full bg-white p-2 rounded-md text-black border border-1 border-slate-500"
                 value={mobileNumber}
                 onChange={(e) => setMobileNumber(e.target.value)}
@@ -110,6 +122,7 @@ function CreateOrEditUser({ selectedUser, onSubmit }) {
               <select
                 id="reason"
                 value={designation}
+                required
                 onChange={(e) => setDesignation(e.target.value)}
                 className="w-full bg-white p-2 text-gray-500 rounded-md text-black border border-1 border-slate-500"
               >
@@ -120,11 +133,11 @@ function CreateOrEditUser({ selectedUser, onSubmit }) {
               </select>
             </label>
   
-            <div onChange={(e) => setGender(e.target.value)} className='text-gray-500 text-sm'>
+            <div onChange={(e) => setGender(e.target.value)}  className='text-gray-500 text-sm'>
               Gender:
               <div className='space-x-4 text-gray-500 text-sm ml-14'>
-                <input type="radio" checked={gender === 'MALE'} value="MALE" name="gender" /> Male
-                <input type="radio" checked={gender === 'FEMALE'} value="FEMALE" name="gender" /> Female
+                <input type="radio" checked={gender === 'Male'} value="Male" name="gender" /> Male
+                <input type="radio" checked={gender === 'Female'} value="Female" name="gender" /> Female
               </div>
             </div>
   
@@ -150,6 +163,7 @@ function CreateOrEditUser({ selectedUser, onSubmit }) {
               <label className="text-stone-500 text-sm">Upload Photo
                 <input
                   type="file"
+                  required
                   accept="image/jpeg,image/png"
                   onChange={handleFileChange}
                   className="w-full bg-white p-2 rounded-md text-black border border-1 border-slate-500"

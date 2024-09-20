@@ -6,7 +6,7 @@ import { useSelector } from"react-redux";
 function Navbar() {
   const navigate = useNavigate()
   const user = useSelector((state)=> state);
-  console.log(user);
+  // console.log(user.LoginLogoutUser.user.UserName  );
 
   function handleLogout() {
     localStorage.removeItem("access_token");
@@ -46,7 +46,7 @@ function Navbar() {
     </div>
   
         <div className='flex flex-row  text-base text-gray-300 pt-4 lg:pt-0  justify-self-end'>
-              <h6 className='ml-10'>Name</h6>
+              <h6 className='ml-10'>{user.LoginLogoutUser.user.UserName }</h6>
             <button
        
           className={"ml-10 mr-10"}
